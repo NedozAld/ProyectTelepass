@@ -1,6 +1,9 @@
 package com.peaje.telepass.Models.Entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,19 +14,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Builder
-public class Tarifa {
+public class VehiculoCategoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String tipo;
 
-    @ManyToOne
-    private Usuario usuario;
-
-    private Double saldo;
-
-    @ManyToOne
-    private TipoPago tipoPago;
-
-    private Boolean activo;
-
+    // Getters y setters
 }

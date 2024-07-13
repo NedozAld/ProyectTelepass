@@ -1,4 +1,7 @@
 package com.peaje.telepass.Models.Repository;
 
-public interface ZonaRepository {
+import com.peaje.telepass.Models.Entity.Zona;
+import org.springframework.data.repository.CrudRepository;
+
+public interface ZonaRepository extends CrudRepository<Zona,Long> {
 }
