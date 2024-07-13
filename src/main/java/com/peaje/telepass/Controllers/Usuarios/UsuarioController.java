@@ -1,7 +1,7 @@
 package com.peaje.telepass.Controllers.Usuarios;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.peaje.telepass.Models.Entity.Usuario;
+import org.springframework.web.bind.annotation.*;
 
 import com.peaje.telepass.Models.DTOs.UsuarioDTO;
 import com.peaje.telepass.Services.Usuarios.UsuarioService;
@@ -10,11 +10,8 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import java.util.Optional;
 
 
 @RestController
@@ -38,6 +35,22 @@ public class UsuarioController {
   @PostMapping()
   public ResponseEntity<UsuarioDTO> createUser(@RequestBody UsuarioDTO usuarioDTO) {
       return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.createUsuario(usuarioDTO));
+  }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<UsuarioDTO> updateUser(@PathVariable Long id, @RequestBody UsuarioDTO usuarioDTO) {
+    UsuarioDTO usuario = usuarioService.findById(id);
+    if(usuario.getId() == null) {
+      return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok(usuarioService.updateUsuario(id, usuarioDTO));
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+    UsuarioDTO usuario = usuarioService.findById(id);
+    usuarioService.deleteUsuario(id);
+    return ResponseEntity.noContent().build();
   }
 
 }
