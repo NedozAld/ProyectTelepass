@@ -1,7 +1,6 @@
 package com.peaje.telepass.Models.DTOs;
 
 
-import com.peaje.telepass.Models.Entity.Vehiculo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,11 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TelepassDTO {
+public class TipoPagoDTO {
+
     private Long id;
-    private Long usuarioId;
-    private Double saldo;
-    private Boolean activo;
-    private Long tipoPagoId;
-    private Long vehiculoId;
+    private String descripcion;
 }

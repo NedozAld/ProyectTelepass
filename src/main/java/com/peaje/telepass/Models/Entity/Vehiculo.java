@@ -1,6 +1,5 @@
 package com.peaje.telepass.Models.Entity;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,16 +11,16 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Telepass {
+public class Vehiculo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String modelo;
+    private String marca;
+    private String placa;
+    private String color;
+    @ManyToOne
+    private VehiculoCategoria categoria;
     @ManyToOne
     private Usuario usuario;
-    private Double saldo;
-    private Boolean activo;
-    @ManyToOne
-    private TipoPago tipoPago;
-    @ManyToOne
-    private  Vehiculo vehiculo;
 }

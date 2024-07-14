@@ -15,15 +15,12 @@ public class Tarifa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Double monto;
 
     @ManyToOne
-    private Usuario usuario;
-
-    private Double saldo;
+    private VehiculoCategoria vehiculo;
 
     @ManyToOne
-    private TipoPago tipoPago;
-
-    private Boolean activo;
+    private Zona zona;
 
 }
