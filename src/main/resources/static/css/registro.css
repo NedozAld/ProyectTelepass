@@ -1,0 +1,100 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(to bottom, #00BFFF, #1E90FF);
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../Imagenes/imagen.jpg");
+
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px; /* Ajustado para hacer el contorno más grande */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+h1 {
+    text-align: center;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group-half {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.input-half {
+    width: 48%;
+}
+
+.input-half label, .input-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-half input[type="text"], .input-group input[type="text"],
+.input-group input[type="email"], .input-group input[type="password"],
+.input-group input[type="date"] {
+    width: 100%;
+    padding: 7px; /* Incrementado para mayor altura */
+    border: none;
+    border-radius: 5px;
+    box-sizing: border-box; /* Asegura que el padding no exceda el ancho */
+}
+
+.input-group input[type="radio"] {
+    margin-right: 5px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #32CD32;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #228B22;
+}
+
+p {
+    text-align: center;
+    font-size: 12px;
+}
+
+.radio-group {
+    display: flex;
+    justify-content: space-around;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+}
+
+.radio-option label {
+    margin-left: 5px;
+}
+
+.link {
+    color: #FFD700; /* Color dorado */
+    text-decoration: none;
+}
+
+.link:hover {
+    text-decoration: underline;
+}

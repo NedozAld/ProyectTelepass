@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrador de Peajes</title>
+    <link rel="stylesheet" href="../css/adm.css">
+</head>
+<body>
+<div class="container">
+    <header class="header">
+        <h1>Panel de Administración</h1>
+        <nav class="nav-bar">
+            <a href="#usuarios" data-section="usuarios">Gestión de Usuarios</a>
+            <a href="#peajes" data-section="peajes">Gestión de Peajes</a>
+            <a href="#peajes" data-section="peajes">Categoria Vehicular</a>
+            <a href="#tarifas" data-section="tarifas">Gestión de Tarifas</a>
+            <a href="#transacciones" data-section="transacciones">Ver Transacciones</a>
+            <a href="#pago-efectivo" data-section="pago-efectivo">Pago</a>
+            <a href="" id="salir">Salir</a>
+        </nav>
+    </header>
+    <main class="main-content">
+        <section id="usuarios" class="content-section">
+            <h2>Gestión de Usuarios</h2>
+            <div class="table-container">
+                <table id="usuariosTable">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <th>Cédula</th>
+                        <th>Correo</th>
+                        <th>Fecha de Nacimiento</th>
+                        <th>Género</th>
+                        <th>Rol</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Aquí se llenará dinámicamente -->
+                    </tbody>
+                </table>
+                <p id="emptyMessage" style="display: none;">No hay información</p>
+            </div>
+        </section>
+        <!-- Otras secciones omitidas por brevedad -->
+    </main>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Verificar si hay un token almacenado en localStorage
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('No hay token de autenticación. Por favor, inicia sesión.');
+            // Redirigir a la página de inicio de sesión u otra acción adecuada
+            window.location.href = '/login.html'; // Ajusta la ruta según tu configuración
+            return;
+        }
+
+        // Función para obtener y mostrar usuarios
+        async function fetchUsuarios() {
+            try {
+                const response = await fetch('/api/usuario', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error en la solicitud');
+                }
+
+                const data = await response.json();
+                console.log('Usuarios recibidos:', data);
+                const usuariosTable = document.getElementById('usuariosTable').getElementsByTagName('tbody')[0];
+                const emptyMessage = document.getElementById('emptyMessage');
+
+                if (data.length === 0) {
+                    emptyMessage.style.display = 'block';
+                    return;
+                }
+
+                data.forEach(usuario => {
+                    const row = usuariosTable.insertRow();
+                    row.innerHTML = `
+                        <td>${usuario.id}</td>
+                        <td>${usuario.nombre}</td>
+                        <td>${usuario.apellido}</td>
+                        <td>${usuario.cedula}</td>
+                        <td>${usuario.correo}</td>
+                        <td>${usuario.fechaNacimiento}</td>
+                        <td>${usuario.genero}</td>
+                        <td>${usuario.rol}</td>
+                        <td>
+                            <!-- Botones de acciones (editar, eliminar, etc.) -->
+                        </td>
+                    `;
+                });
+
+            } catch (error) {
+                console.error('Error al obtener usuarios:', error);
+                alert('Hubo un problema al cargar los usuarios.');
+            }
+        }
+
+        // Llamar a la función para obtener y mostrar usuarios al cargar la página
+        fetchUsuarios();
+    });
+</script>
+</body>
+</html>

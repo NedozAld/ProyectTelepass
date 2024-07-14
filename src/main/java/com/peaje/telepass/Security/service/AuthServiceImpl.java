@@ -26,7 +26,10 @@ public class AuthServiceImpl implements AuthService{
                 .nombre(userDTO.getNombre())
                 .apellido(userDTO.getApellido())
                 .correo(userDTO.getCorreo())
+                .cedula(userDTO.getCedula())
                 .contrasena(passwordEncoder.encode(userDTO.getContrasena()))
+                .fechaNacimiento(userDTO.getFechaNacimiento())
+                .genero(userDTO.getGenero())
                 .role(Role.USER)
                 .build();
         userRepository.save(user);

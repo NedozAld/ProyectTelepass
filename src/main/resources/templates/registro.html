@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/registro.css">
+    <title>Formulario Registro</title>
+</head>
+<body>
+<div class="container">
+    <form id="register-form">
+        <h1>Registrarte</h1>
+        <p>Es rápido y fácil</p>
+        <div class="input-group-half">
+            <div class="input-half">
+                <label for="firstName">Nombre</label>
+                <input id="nombre" type="text"  name="firstName" required>
+            </div>
+            <div class="input-half">
+                <label for="lastName">Apellido</label>
+                <input id="apellido" type="text"  name="lastName" required>
+            </div>
+        </div>
+        <div class="input-group">
+            <label for="email">Correo electrónico</label>
+            <input  id="correo" type="email"  placeholder="Ingresa tu email" name="email" required>
+        </div>
+        <div class="input-group">
+            <label for="password">Contraseña nueva</label>
+            <input  id="contrasena" type="password"  name="password" required>
+        </div>
+        <div class="input-group">
+            <label for="cedula">Cédula</label>
+            <input id="cedula" type="text"  name="cedula" required>
+        </div>
+        <div class="input-group">
+            <label for="birthDate">Fecha de nacimiento</label>
+            <input id="fechaNacimiento" type="date" name="birthDate" required>
+        </div>
+        <div class="input-group">
+            <select id="genero" name="genero" required>
+                <option value="" disabled selected>Género</option>
+                <option value="M">Masculino</option>
+                <option value="F">Femenino</option>
+            </select>
+        </div>
+        <button type="submit" id="submitButton">Registrarte</button>
+        <p>Es posible que las personas que usan nuestro servicio hayan subido
+            tu información de contacto a PeajesEC. <a href="#" class="link">Obtener mas informacion</a> </p>
+        <p>Al hacer clic en "Registrarte", aceptas nuestras <a href="#" class="link">Condiciones</a>, la <a href="#"
+                                                                                                            class="link">Política de privacidad</a> y la <a href="#" class="link">Política de cookies</a>. Es
+            posible que te enviemos
+            notificaciones por correo, que puedes desactivar cuando quieras.</p>
+    </form>
+</div>
+<script>
+    document.getElementById('register-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevenir el comportamiento por defecto del formulario
+            registerUser();
+        });
+
+        async function registerUser() {
+            const nombre = document.getElementById('nombre').value;
+            const apellido = document.getElementById('apellido').value;
+            const cedula = document.getElementById('cedula').value;
+            const correo = document.getElementById('correo').value;
+            const contrasena = document.getElementById('contrasena').value;
+            const fechaNacimiento = document.getElementById('fechaNacimiento').value;
+            const genero = document.getElementById('genero').value;
+
+            const response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    nombre,
+                    apellido,
+                    cedula,
+                    correo,
+                    contrasena,
+                    fechaNacimiento,
+                    genero
+                })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                alert('Registro exitoso');
+                window.location.href = '/login'; // Redirigir a la página de login u otra página
+            } else {
+                alert('Error en el registro');
+            }
+        }
+
+</script>
+</body>
+</html>

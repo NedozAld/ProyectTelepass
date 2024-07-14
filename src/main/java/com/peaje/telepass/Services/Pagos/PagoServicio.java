@@ -5,6 +5,7 @@ import com.peaje.telepass.Models.DTOs.PagoDTO;
 import com.peaje.telepass.Models.DTOs.TelepassDTO;
 import com.peaje.telepass.Models.Entity.*;
 import com.peaje.telepass.Models.Repository.*;
+import com.peaje.telepass.Services.Email.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ public class PagoServicio {
     private  final ZonaRepository zonaRepository;
     private final TarifaRepository tarifaRepository;
     private final FacturaRepository facturaRepository;
+    private final EmailService emailService;
 
     public PagoDTO realizarPago(Long vehiculoId, Long zonaId) {
         Vehiculo vehiculo = vehiculoRepository.findById(vehiculoId)
@@ -65,8 +67,38 @@ public class PagoServicio {
                 .build();
         facturaRepository.save(factura);
 
+        // Envía la factura por correo electrónico
+        enviarFacturaPorCorreo(factura, telepass.getUsuario().getCorreo());
+
         return convertToDto(pago);
     }
+
+    private void enviarFacturaPorCorreo(Factura factura, String emailUsuario) {
+        Usuario usuario = factura.getPago().getUsuario();
+        Vehiculo vehiculo = factura.getPago().getVehiculo();
+        Zona zona = factura.getPago().getZona();
+
+        String subject = "Factura de Pago de Peaje";
+        String body = "Estimado(a) " + usuario.getNombre() + " " + usuario.getApellido() + ",\n\n" +
+                "Gracias por utilizar nuestro servicio de peaje automatizado. Aquí están los detalles de su factura:\n\n" +
+                "----------------------------------------\n" +
+                "INFORMACIÓN DEL USUARIO\n" +
+                "Cliente: " + usuario.getNombre() + " " + usuario.getApellido() + "\n" +
+                "Correo Electrónico: " + usuario.getCorreo() + "\n\n" +
+                "----------------------------------------\n" +
+                "DETALLES DE LA FACTURA\n" +
+                "Monto: $" + factura.getPago().getMonto() + "\n" +
+                "Fecha: " + factura.getFechaFactura() + "\n" +
+                "Vehículo: " + vehiculo.getMarca() + " " + vehiculo.getModelo() + " (Placa: " + vehiculo.getPlaca() + ")\n" +
+                "Zona: " + zona.getNombre() + "\n" +
+                "----------------------------------------\n\n" +
+                "Si tiene alguna pregunta o necesita asistencia, no dude en contactarnos.\n\n" +
+                "Saludos cordiales,\n" +
+                "El equipo de Telepass";
+
+        emailService.sendEmail(emailUsuario, subject, body);
+    }
+
 
 
 

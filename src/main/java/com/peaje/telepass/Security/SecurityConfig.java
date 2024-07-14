@@ -25,7 +25,8 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/**","/auth","/dashboard","/login","/registro", "/css/**", "/Imagenes/**","/admin/**").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 //.httpBasic(Customizer.withDefaults());
@@ -34,6 +35,7 @@ public class SecurityConfig {
         return http.build();
 
     }
+
     /*
     public AuthenticationSuccessHandler successHandler() {
         return (((request, response, authentication) -> {
