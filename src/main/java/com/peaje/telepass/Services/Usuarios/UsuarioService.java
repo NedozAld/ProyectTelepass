@@ -1,12 +1,16 @@
 package com.peaje.telepass.Services.Usuarios;
 
 import com.peaje.telepass.Models.Entity.Role;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.peaje.telepass.Models.DTOs.UsuarioDTO;
 import com.peaje.telepass.Models.Entity.Usuario;
 import com.peaje.telepass.Models.Repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -16,6 +20,7 @@ import java.util.stream.Collectors;
 public class UsuarioService {
 
   private final UsuarioRepository usuarioRepository;
+  private  final PasswordEncoder passwordEncoder;
 
   public List<UsuarioDTO> findAll() {
     return usuarioRepository.findAll()
@@ -42,7 +47,7 @@ public class UsuarioService {
               .cedula(usuarioDTO.getCedula())
               .correo(usuarioDTO.getCorreo())
               .fechaNacimiento(usuarioDTO.getFechaNacimiento())
-              .contrasena(usuarioDTO.getContrasena())
+              .contrasena(passwordEncoder.encode(usuarioDTO.getContrasena()))
               .genero(usuarioDTO.getGenero())
               .role(Role.USER)
               .build();
@@ -56,19 +61,18 @@ public class UsuarioService {
   public UsuarioDTO updateUsuario(Long id, UsuarioDTO usuarioDTO) {
     Optional<Usuario> usuario = usuarioRepository.findById((id));
     if (usuario.isPresent()) {
-      Usuario usuarioActual = Usuario.builder()
-              .cedula(usuarioDTO.getCedula())
-              .nombre(usuarioDTO.getNombre())
-              .apellido(usuarioDTO.getApellido())
-              .fechaNacimiento(usuarioDTO.getFechaNacimiento())
-              .correo(usuarioDTO.getCorreo())
-              .contrasena(usuarioDTO.getContrasena())
-              .genero(usuarioDTO.getGenero())
-              .build();
+      Usuario usuarioActual = usuario.get();
+      usuarioActual.setNombre(usuarioDTO.getNombre());
+      usuarioActual.setApellido(usuarioDTO.getApellido());
+      usuarioActual.setCedula(usuarioDTO.getCedula());
+      usuarioActual.setCorreo(usuarioDTO.getCorreo());
+      usuarioActual.setContrasena(passwordEncoder.encode(usuarioDTO.getContrasena()));
+      usuarioActual.setFechaNacimiento(usuarioDTO.getFechaNacimiento());
+      usuarioActual.setGenero(usuarioDTO.getGenero());
       this.usuarioRepository.save(usuarioActual);
       return convertTUsuarioDTO(usuarioActual);
     } else {
-      throw new UnsupportedOperationException("El usuario no existe");
+        throw new UnsupportedOperationException("El usuario no existe");
     }
   }
 
@@ -79,9 +83,19 @@ public class UsuarioService {
             .apellido(usuario.getApellido())
             .cedula(usuario.getCedula())
             .correo(usuario.getCorreo())
-            .contrasena(usuario.getContrasena())
+            .contrasena(passwordEncoder.encode(usuario.getContrasena()))
             .fechaNacimiento(usuario.getFechaNacimiento())
             .genero(usuario.getGenero())
             .build();
+  }
+
+  public String deleteUsuario(Long id) {
+    Optional<Usuario> usuario = usuarioRepository.findById(id);
+    if(usuario.isPresent()) {
+      Usuario usuarioActual = usuario.get();
+      usuarioRepository.delete(usuarioActual);
+      return "User with ID " +id +" deleted successfully";
+    }
+    return "The user with ID:"+id +" does not exist";
   }
 }
