@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 public class UsuarioService {
 
   private final UsuarioRepository usuarioRepository;
-  private  final PasswordEncoder passwordEncoder;
 
   public List<UsuarioDTO> findAll() {
     return usuarioRepository.findAll()
@@ -47,7 +46,7 @@ public class UsuarioService {
               .cedula(usuarioDTO.getCedula())
               .correo(usuarioDTO.getCorreo())
               .fechaNacimiento(usuarioDTO.getFechaNacimiento())
-              .contrasena(passwordEncoder.encode(usuarioDTO.getContrasena()))
+              .contrasena(usuarioDTO.getContrasena())
               .genero(usuarioDTO.getGenero())
               .role(Role.USER)
               .build();
@@ -66,7 +65,7 @@ public class UsuarioService {
       usuarioActual.setApellido(usuarioDTO.getApellido());
       usuarioActual.setCedula(usuarioDTO.getCedula());
       usuarioActual.setCorreo(usuarioDTO.getCorreo());
-      usuarioActual.setContrasena(passwordEncoder.encode(usuarioDTO.getContrasena()));
+      usuarioActual.setContrasena(usuarioDTO.getContrasena());
       usuarioActual.setFechaNacimiento(usuarioDTO.getFechaNacimiento());
       usuarioActual.setGenero(usuarioDTO.getGenero());
       this.usuarioRepository.save(usuarioActual);
@@ -83,7 +82,7 @@ public class UsuarioService {
             .apellido(usuario.getApellido())
             .cedula(usuario.getCedula())
             .correo(usuario.getCorreo())
-            .contrasena(passwordEncoder.encode(usuario.getContrasena()))
+            .contrasena(usuario.getContrasena())
             .fechaNacimiento(usuario.getFechaNacimiento())
             .genero(usuario.getGenero())
             .build();
