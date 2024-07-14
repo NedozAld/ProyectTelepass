@@ -25,5 +25,9 @@ public class ViewController {
     public String admin() {
         return "admin";
     }
+    @GetMapping("/GestionUsuario")
+    public String GestionUsuario() {
+        return "GestionUsuario";
+    }
 
 }

@@ -13,15 +13,16 @@
         <nav class="nav-bar">
             <a href="#usuarios" data-section="usuarios">Gestión de Usuarios</a>
             <a href="#peajes" data-section="peajes">Gestión de Peajes</a>
-            <a href="#peajes" data-section="peajes">Categoria Vehicular</a>
-            <a href="#tarifas" data-section="tarifas">Gestión de Tarifas</a>
-            <a href="#transacciones" data-section="transacciones">Ver Transacciones</a>
-            <a href="#pago-efectivo" data-section="pago-efectivo">Pago</a>
+            <a href="#vehiculos" data-section="vehiculos">Categoria Vehiculo</a>
+            <a href="#tarifas" data-section="peajes">Tarifa</a>
+            <a href="#transaccion" data-section="peajes">Transacciones</a>
+            <a href="#pago-peaje" data-section="peajes">Pago de Peaje</a>
+            <!-- Otros enlaces omitidos por brevedad -->
             <a href="" id="salir">Salir</a>
         </nav>
     </header>
     <main class="main-content">
-        <section id="usuarios" class="content-section">
+        <section id="usuarios" class="content-section" style="display: none;">
             <h2>Gestión de Usuarios</h2>
             <div class="table-container">
                 <table id="usuariosTable">
@@ -38,28 +39,142 @@
                         <th>Acciones</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="usuariosTableBody">
                     <!-- Aquí se llenará dinámicamente -->
                     </tbody>
                 </table>
                 <p id="emptyMessage" style="display: none;">No hay información</p>
             </div>
         </section>
+        <section id="peajes" class="content-section" style="display: none;">
+            <h2>Gestión de Peajes</h2>
+            <button id="btnMostrarFormCrearPeaje">Crear Nuevo Peaje</button>
+            <div id="formCrearPeaje" style="display: none;">
+                <h3>Crear Nueva Zona de Peaje</h3>
+                <form id="crearPeajeForm">
+                    <label for="nombrePeaje">Nombre de la Zona:</label>
+                    <input type="text" id="nombrePeaje" name="nombrePeaje" required>
+                    <button type="submit">Crear Zona</button>
+                </form>
+            </div>
+            <div id="formActualizarPeaje" style="display: none;">
+                <h3>Actualizar Zona de Peaje</h3>
+                <form id="actualizarPeajeForm">
+                    <input type="hidden" id="peajeIdActualizar" name="peajeIdActualizar">
+                    <label for="nombrePeajeActualizar">Nombre de la Zona:</label>
+                    <input type="text" id="nombrePeajeActualizar" name="nombrePeajeActualizar" required>
+                    <button type="submit">Actualizar Zona</button>
+                </form>
+            </div>
+            <div class="table-container">
+                <table id="peajesTable">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Zona</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody id="peajesTableBody">
+                    <!-- Aquí se llenará dinámicamente -->
+                    </tbody>
+                </table>
+                <p id="emptyMessagePeajes" style="display: none;">No hay información de peajes</p>
+            </div>
+        </section>
+
+
+
+
         <!-- Otras secciones omitidas por brevedad -->
     </main>
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Verificar si hay un token almacenado en localStorage
         const token = localStorage.getItem('token');
         if (!token) {
             alert('No hay token de autenticación. Por favor, inicia sesión.');
-            // Redirigir a la página de inicio de sesión u otra acción adecuada
-            window.location.href = '/login.html'; // Ajusta la ruta según tu configuración
+            window.location.href = '/login.html'; // Redirige a la página de inicio de sesión
             return;
         }
 
-        // Función para obtener y mostrar usuarios
+        // Manejadores de eventos para los enlaces del menú
+        const navLinks = document.querySelectorAll('.nav-bar a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.preventDefault(); // Evita el comportamiento predeterminado del enlace
+                const sectionId = link.getAttribute('data-section');
+                const section = document.getElementById(sectionId);
+
+                // Ocultar todas las secciones menos la seleccionada
+                const sections = document.querySelectorAll('.content-section');
+                sections.forEach(sec => {
+                    if (sec !== section) {
+                        sec.style.display = 'none';
+                    }
+                });
+
+                // Mostrar la sección correspondiente
+                section.style.display = 'block';
+
+                // Cargar datos si es necesario
+                if (sectionId === 'usuarios') {
+                    fetchUsuarios();
+                } else if (sectionId === 'peajes') {
+                    fetchPeajes();
+                }else if (sectionId === 'vehiculos') {
+                    fetchVehiculos;
+                }
+            });
+        });
+
+        // Mostrar formulario de creación de peaje al hacer clic en "Crear Nuevo Peaje"
+        document.getElementById('btnMostrarFormCrearPeaje').addEventListener('click', function(event) {
+            event.preventDefault();
+            document.getElementById('formCrearPeaje').style.display = 'block';
+            document.getElementById('formActualizarPeaje').style.display = 'none';
+        });
+
+
+
+        // Formulario para crear nueva zona de peaje
+        document.getElementById('crearPeajeForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const nombrePeaje = document.getElementById('nombrePeaje').value;
+            crearZona({ nombre: nombrePeaje });
+            document.getElementById('formCrearPeaje').style.display = 'none';
+        });
+
+        // Formulario para actualizar zona de peaje
+        document.getElementById('actualizarPeajeForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const peajeId = document.getElementById('peajeIdActualizar').value;
+            const nombrePeaje = document.getElementById('nombrePeajeActualizar').value;
+            actualizarZona(peajeId, { nombre: nombrePeaje });
+            document.getElementById('formActualizarPeaje').style.display = 'none';
+        });
+
+        // Agregar manejo de eventos para los botones de acciones en la tabla de peajes
+        document.getElementById('peajesTable').addEventListener('click', function(event) {
+            const target = event.target;
+
+            // Si se hace clic en el botón "Eliminar" de una fila
+            if (target.matches('.btn-eliminar')) {
+                const zonaId = target.dataset.peajeId;
+                eliminarZona(zonaId);
+            }
+
+            // Si se hace clic en el botón "Editar" de una fila
+            if (target.matches('.btn-editar')) {
+                const zonaId = target.dataset.peajeId;
+                const nombreZona = target.closest('tr').querySelector('td:nth-child(2)').textContent;
+                document.getElementById('peajeIdActualizar').value = zonaId;
+                document.getElementById('nombrePeajeActualizar').value = nombreZona;
+                document.getElementById('formCrearPeaje').style.display = 'none';
+                document.getElementById('formActualizarPeaje').style.display = 'block';
+            }
+        });
+
         async function fetchUsuarios() {
             try {
                 const response = await fetch('/api/usuario', {
@@ -75,8 +190,10 @@
 
                 const data = await response.json();
                 console.log('Usuarios recibidos:', data);
-                const usuariosTable = document.getElementById('usuariosTable').getElementsByTagName('tbody')[0];
+                const usuariosTableBody = document.getElementById('usuariosTableBody');
                 const emptyMessage = document.getElementById('emptyMessage');
+
+                usuariosTableBody.innerHTML = ''; // Limpiar contenido previo
 
                 if (data.length === 0) {
                     emptyMessage.style.display = 'block';
@@ -84,7 +201,7 @@
                 }
 
                 data.forEach(usuario => {
-                    const row = usuariosTable.insertRow();
+                    const row = usuariosTableBody.insertRow();
                     row.innerHTML = `
                         <td>${usuario.id}</td>
                         <td>${usuario.nombre}</td>
@@ -106,8 +223,123 @@
             }
         }
 
-        // Llamar a la función para obtener y mostrar usuarios al cargar la página
-        fetchUsuarios();
+        async function fetchPeajes() {
+            try {
+                const response = await fetch('/api/zonas', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error en la solicitud');
+                }
+
+                const data = await response.json();
+                console.log('Peajes recibidos:', data);
+                const peajesTableBody = document.getElementById('peajesTableBody');
+                const emptyMessage = document.getElementById('emptyMessagePeajes');
+
+                peajesTableBody.innerHTML = ''; // Limpiar contenido previo
+
+                if (data.length === 0) {
+                    emptyMessage.style.display = 'block';
+                    return;
+                }
+
+                data.forEach(peaje => {
+                    const row = peajesTableBody.insertRow();
+                    row.innerHTML = `
+                        <td>${peaje.id}</td>
+                        <td>${peaje.nombre}</td>
+                        <td>
+                            <button class="btn-editar" data-peaje-id="${peaje.id}">Editar</button>
+                            <button class="btn-eliminar" data-peaje-id="${peaje.id}">Eliminar</button>
+                        </td>
+                    `;
+                });
+
+            } catch (error) {
+                console.error('Error al obtener peajes:', error);
+                alert('Hubo un problema al cargar los peajes.');
+            }
+        }
+
+        async function crearZona(zonaData) {
+            try {
+                const response = await fetch('/api/zonas/crear', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(zonaData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error al crear la zona');
+                }
+
+                const nuevaZona = await response.json();
+                console.log('Zona creada:', nuevaZona);
+                fetchPeajes(); // Actualizar la tabla de peajes después de crear
+            } catch (error) {
+                console.error('Error al crear la zona:', error);
+                alert('Hubo un problema al crear la zona.');
+            }
+        }
+
+
+
+        async function actualizarZona(zonaId, zonaData) {
+            try {
+                const response = await fetch(`/api/zonas/actualizar/${zonaId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(zonaData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error al actualizar la zona');
+                }
+
+                const zonaActualizada = await response.json();
+                console.log('Zona actualizada:', zonaActualizada);
+                fetchPeajes(); // Actualizar la tabla de peajes después de actualizar
+            } catch (error) {
+                console.error('Error al actualizar la zona:', error);
+                alert('Hubo un problema al actualizar la zona.');
+            }
+        }
+
+        async function eliminarZona(zonaId) {
+            try {
+                const response = await fetch(`/api/zonas/eliminar/${zonaId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error al eliminar la zona');
+                }
+
+                console.log('Zona eliminada con éxito');
+                fetchPeajes(); // Actualizar la tabla de peajes después de eliminar
+            } catch (error) {
+                console.error('Error al eliminar la zona:', error);
+                alert('Hubo un problema al eliminar la zona.');
+            }
+        }
+
+
+
     });
 </script>
 </body>
