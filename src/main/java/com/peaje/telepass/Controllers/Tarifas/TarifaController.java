@@ -39,9 +39,5 @@ public class TarifaController {
         return ResponseEntity.ok(tarifas);
     }
 
-    @GetMapping("/vehiculo/{vehiculoId}/zona/{zonaId}")
-    public ResponseEntity<List<TarifaDTO>> obtenerTarifasPorVehiculoYZona(@PathVariable Long vehiculoId, @PathVariable Long zonaId) {
-        List<TarifaDTO> tarifas = tarifaService.obtenerTarifasPorVehiculoYZona(vehiculoId, zonaId);
-        return ResponseEntity.ok(tarifas);
-    }
+
 }

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +20,7 @@ public class PagoServicio {
     private final TelepassRepository telepassRepository;
     private  final ZonaRepository zonaRepository;
     private final TarifaRepository tarifaRepository;
+    private final FacturaRepository facturaRepository;
 
     public PagoDTO realizarPago(Long vehiculoId, Long zonaId) {
         Vehiculo vehiculo = vehiculoRepository.findById(vehiculoId)
@@ -53,10 +55,17 @@ public class PagoServicio {
                 .monto(monto)
                 .fechaPago(LocalDate.now())
                 .build();
+        pagoRepository.save(pago);
+        // Generar factura
+        Factura factura = Factura.builder()
+                .pago(pago)
+                .detalle("Pago de peaje de " + monto + " en la zona " + zona.getNombre())
+                .usuario(telepass.getUsuario())
+                .fechaFactura(LocalDate.now())
+                .build();
+        facturaRepository.save(factura);
 
-
-
-        return convertToDto(pagoRepository.save(pago));
+        return convertToDto(pago);
     }
 
 

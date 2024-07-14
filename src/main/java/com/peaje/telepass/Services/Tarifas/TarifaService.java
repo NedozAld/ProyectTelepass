@@ -70,17 +70,7 @@ public class TarifaService {
                 .collect(Collectors.toList());
     }
 
-    public List<TarifaDTO> obtenerTarifasPorVehiculoYZona(Long vehiculoId, Long zonaId) {
-        VehiculoCategoria vehiculo = vehiculoRepository.findById(vehiculoId)
-                .orElseThrow(() -> new RuntimeException("Vehiculo no encontrado"));
-        Zona zona = zonaRepository.findById(zonaId)
-                .orElseThrow(() -> new RuntimeException("Zona no encontrada"));
 
-        List<Tarifa> tarifas = tarifaRepository.findByVehiculoAndZona(vehiculo, zona);
-        return tarifas.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }
 
 
     public TarifaDTO convertToDto(Tarifa tarifa) {

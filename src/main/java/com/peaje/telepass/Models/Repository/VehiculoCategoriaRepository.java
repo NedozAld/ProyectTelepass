@@ -11,5 +11,5 @@ import java.util.Optional;
 @Repository
 public interface VehiculoCategoriaRepository extends CrudRepository<VehiculoCategoria,Long> {
 
-    Optional<Tarifa> findByVehiculoAndZona(VehiculoCategoria vehiculoCategoria, Zona zona);
+   // Optional<Tarifa> findByVehiculoAndZona(VehiculoCategoria vehiculoCategoria, Zona zona);
 }
