@@ -1,7 +1,5 @@
 package com.peaje.telepass.Models.DTOs;
 
-import com.peaje.telepass.Models.Entity.Pago;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

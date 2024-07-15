@@ -2,12 +2,15 @@ package com.peaje.telepass.Controllers.Telepass;
 
 
 import com.peaje.telepass.Models.DTOs.VehiculoDTO;
+import com.peaje.telepass.Models.Entity.Vehiculo;
+import com.peaje.telepass.Models.Repository.VehiculoRepository;
 import com.peaje.telepass.Services.Telepass.VehiculoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/vehiculos")
@@ -15,6 +18,7 @@ import java.util.List;
 public class VehiculoController {
 
     private final VehiculoService vehiculoService;
+    private final VehiculoRepository vehiculoRepository;
 
     @PostMapping("/crear")
     public ResponseEntity<VehiculoDTO> save(@RequestBody VehiculoDTO vehiculoDTO) {
@@ -34,9 +38,36 @@ public class VehiculoController {
         return ResponseEntity.ok(vehiculos);
     }
 
+    @GetMapping("/validar-placa")
+    public ResponseEntity<Boolean> validarPlaca(@RequestParam String placa) {
+        boolean existe = vehiculoRepository.existsByPlaca(placa);
+        return ResponseEntity.ok(existe);
+    }
+
+    @GetMapping("/{usuarioId}")
+    public ResponseEntity<List<VehiculoDTO>> getVehiculosByUsuarioId(@PathVariable Long usuarioId) {
+        List<Vehiculo> vehiculos = vehiculoRepository.findByUsuarioId(usuarioId);
+        List<VehiculoDTO> vehiculoDTOs = vehiculos.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(vehiculoDTOs);
+    }
+
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         vehiculoService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    private VehiculoDTO convertToDTO(Vehiculo vehiculo) {
+        VehiculoDTO dto = new VehiculoDTO();
+        dto.setId(vehiculo.getId());
+        dto.setModelo(vehiculo.getModelo());
+        dto.setMarca(vehiculo.getMarca());
+        dto.setPlaca(vehiculo.getPlaca());
+        dto.setColor(vehiculo.getColor());
+        dto.setCategoriaId(vehiculo.getCategoria().getId());
+        dto.setUsuarioId(vehiculo.getUsuario().getId());
+        return dto;
     }
 }

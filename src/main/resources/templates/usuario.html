@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interfaz Usuario</title>
+    <link rel="stylesheet" href="../css/usuario.css" />
+  </head>
+
+  <body>
+    <header>
+      <h1>INTERFAZ USUARIO</h1>
+      <br />
+      <nav>
+        <ul>
+          <li><a href="#" onclick="showSection('pago')">Pago</a></li>
+          <li>
+            <a href="#" onclick="showSection('historial')">Historial Pagos</a>
+          </li>
+          <li>
+            <a href="#" onclick="showSection('ingresar')">Ingresar Vehículo</a>
+          </li>
+          <li><a href="#" onclick="showSection('editar')">Perfil</a></li>
+          <li><a href="#" onclick="showSection('telepass')">Telepass</a></li>
+          <li><a href="#" onclick="showSection('servicios')">Servicios</a></li>
+          <li><a href="#" onclick="showSection('misVehiculos')">Mis Vehículos</a></li>
+          <li><a href="#" onclick="showSection('salir')">Salir</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <section id="pago" class="content">
+        <h2>Realizar Pago</h2>
+        <form id="form-pago">
+          <label for="peaje">Peaje:</label>
+          <select id="peaje"></select>
+          <label for="vehiculo">Vehículo:</label>
+          <select id="vehiculo"></select>
+          <div id="telepass-message"></div>
+          <label for="tarifa">Tarifa:</label>
+          <select id="tarifa"></select>
+          <button type="submit">Pagar</button>
+        </form>
+      </section>
+      <section id="misVehiculos" class="content" style="display:none;">
+        <h2>Mis Vehículos</h2>
+        <table id="vehiculos-table">
+            <tr>
+                <th>Modelo</th>
+                <th>Marca</th>
+                <th>Placa</th>
+                <th>Color</th>
+                <th>Categoría</th>
+            </tr>
+            <!-- Filas dinámicas -->
+        </table>
+    </section>
+
+      <section id="historial" class="content">
+        <h2>Historial Pagos</h2>
+        <table id="historial-table">
+          <tr>
+            <th>Fecha</th>
+            <th>Pago</th>
+            <th>Vehículo</th>
+            <th>Peaje</th>
+            <th>Tramo</th>
+            <th>Precio</th>
+          </tr>
+          <!-- Aquí se agregarían las filas dinámicamente -->
+        </table>
+      </section>
+
+      <section id="ingresar" class="content">
+        <h2>Ingresar Vehículo</h2>
+        <form id="form-vehiculo">
+          <label for="modelo">Modelo:</label>
+          <input type="text" id="modelo" required />
+          <label for="marca">Marca:</label>
+          <input type="text" id="marca" required />
+          <label for="placa">Placa:</label>
+          <input type="text" id="placa" required />
+          <label for="color">Color:</label>
+          <input type="text" id="color" required />
+          <label for="categoria">Categoría:</label>
+          <select id="categoria" required>
+            <!-- Opciones dinámicas serán cargadas aquí -->
+          </select>
+          <button type="submit">Registrar</button>
+        </form>
+      </section>
+
+      <section id="editar" class="content">
+        <h2>Editar Perfil</h2>
+        <form id="form-editar">
+          <label for="cedula">Cédula o RUC:</label>
+          <input type="text" id="cedula" value="" readonly />
+          <label for="nombre">Nombres completos:</label>
+          <input type="text" id="nombre" value="" required />
+          <label for="apellido">Apellido:</label>
+          <input type="text" id="apellido" value="" required />
+          <label for="correo">Correo electrónico:</label>
+          <input type="email" id="correo" value="" readonly />
+          <label for="fecha">Fecha Nacimiento:</label>
+          <input type="date" id="fecha" readonly />
+          <label for="sexo">Sexo:</label>
+          <input type="text" id="sexo" readonly />
+          <button type="submit">Guardar cambios</button>
+        </form>
+        <h3>Cambio de Contraseña</h3>
+        <form id="form-contrasena">
+          <label for="contrasena_actual">Contraseña Actual:</label>
+          <input
+            type="password"
+            id="contrasena_actual"
+            placeholder="Ingresar..."
+            required
+          />
+          <label for="nueva_contrasena">Nueva Contraseña:</label>
+          <input
+            type="password"
+            id="nueva_contrasena"
+            placeholder="Ingresar..."
+            required
+          />
+          <button type="submit">Cambiar contraseña</button>
+        </form>
+      </section>
+
+      <section id="telepass" class="content">
+        <h2>Telepass</h2>
+        <p>Saldo actual: <span id="telepass-saldo">$0.00</span></p>
+        <button id="solicitar-telepass" onclick="solicitarTelepass()">
+          Solicitar Telepass
+        </button>
+        <button id="recargar-telepass" style="display: none" disabled>
+          Recargar Telepass
+        </button>
+      </section>
+
+      <section id="servicios" class="content">
+        <h2>Servicios</h2>
+        <ul id="lista-servicios">
+          <!-- Aquí se agregarían los servicios dinámicamente -->
+        </ul>
+      </section>
+
+      <section id="salir" class="content">
+        <h2>¿Deseas salir?</h2>
+        <button class="salirFo">Salir</button>
+      </section>
+    </main>
+    <script>
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll(".content");
+            sections.forEach((section) => (section.style.display = "none"));
+            document.getElementById(sectionId).style.display = "block";
+        }
+        // Función para cargar las opciones de categorías desde el servidor
+        function cargarCategorias() {
+            fetch('/api/vehiculo-categorias')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error al cargar las categorías.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    let selectCategoria = document.getElementById('categoria');
+
+                    // Limpiar opciones existentes (si las hay)
+                    selectCategoria.innerHTML = '';
+
+                    // Crear y agregar nuevas opciones
+                    data.forEach(categoria => {
+                        let option = document.createElement('option');
+                        option.value = categoria.id; // Asignar el valor del ID de la categoría
+                        option.textContent = categoria.tipo; // Mostrar el nombre de la categoría
+                        selectCategoria.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error al cargar categorías:', error);
+                    // Puedes manejar el error mostrando un mensaje al usuario
+                });
+        }
+        function loadVehiculos() {
+            const usuarioId = localStorage.getItem('usuarioId');
+            
+            if (!usuarioId) {
+                console.error('Error: Usuario no autenticado.');
+                return;
+            }
+
+            fetch(`/api/vehiculos/${usuarioId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error al obtener los vehículos.');
+                    }
+                    return response.json();
+                })
+                .then(vehiculos => {
+                    const vehiculosTable = document.getElementById('vehiculos-table');
+                    // Limpiar las filas existentes, excepto la fila de encabezado
+                    vehiculosTable.querySelectorAll('tr:not(:first-child)').forEach(row => row.remove());
+                    
+                    // Agregar las filas dinámicamente
+                    vehiculos.forEach(vehiculo => {
+                        const row = vehiculosTable.insertRow();
+                        row.insertCell().textContent = vehiculo.modelo;
+                        row.insertCell().textContent = vehiculo.marca;
+                        row.insertCell().textContent = vehiculo.placa;
+                        row.insertCell().textContent = vehiculo.color;
+                        row.insertCell().textContent = vehiculo.categoriaId; // Ajustar según necesites
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al obtener los vehículos.');
+                });
+        }
+
+// Llamar a esta función al mostrar la sección "Mis Vehículos"
+document.querySelector('a[onclick="showSection(\'misVehiculos\')"]').addEventListener('click', loadVehiculos);
+
+
+        document.addEventListener("DOMContentLoaded", (e) => {
+            // consumir endpoint para listar las categoria de vehiculo
+            cargarCategorias();
+            loadVehiculos()
+            document.getElementById('form-vehiculo').addEventListener('submit', function(event) {
+                event.preventDefault(); // Evita el envío del formulario por defecto
+
+                // Obtener los valores del formulario
+                const modelo = document.getElementById('modelo').value;
+                const marca = document.getElementById('marca').value;
+                const placa = document.getElementById('placa').value;
+                const color = document.getElementById('color').value;
+                const categoriaId = document.getElementById('categoria').value;
+                
+                const usuarioId = localStorage.getItem('usuarioId')
+                if(!usuarioId) {
+                    console.error('Error: Usuario no autenticado')
+                    return;
+                }
+
+                // Verificar si la placa ya existe
+                fetch(`/api/vehiculos/validar-placa?placa=${placa}`, {
+                    method: 'GET'
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error al verificar la placa.');
+                    }
+                    return response.json();
+                })
+                .then(existe => {
+                    if (existe) {
+                        alert('El vehículo con esta placa ya existe. No puedes agregarlo.');
+                    } else {
+                        // Crear objeto con los datos a enviar
+                        const vehiculo = {
+                            modelo: modelo,
+                            marca: marca,
+                            placa: placa,
+                            color: color,
+                            categoriaId: parseInt(categoriaId),
+                            usuarioId: parseInt(usuarioId)
+                        };
+
+                        // Hacer la solicitud POST para registrar el vehículo
+                        fetch('/api/vehiculos/crear', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(vehiculo)
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Error al registrar el vehículo.');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Vehículo registrado:', data);
+                            alert('Vehículo registrado exitosamente.');
+                            // Limpiar los campos del formulario
+                            document.getElementById('form-vehiculo').reset();
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Error al registrar el vehículo.');
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al verificar la placa.');
+                });
+            });
+
+        });
+    </script>
+  </body>
+</html>

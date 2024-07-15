@@ -1,9 +1,5 @@
 package com.peaje.telepass.Models.DTOs;
 
-import com.peaje.telepass.Models.Entity.Usuario;
-import com.peaje.telepass.Models.Entity.Vehiculo;
-import com.peaje.telepass.Models.Entity.Zona;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

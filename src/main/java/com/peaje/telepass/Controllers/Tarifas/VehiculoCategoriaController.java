@@ -33,6 +33,7 @@ public class VehiculoCategoriaController {
         return ResponseEntity.ok().build();
     }
 
+    
     @GetMapping
     public ResponseEntity<List<VehiculoCategoriaDTO>> obtenerTodasLasCategorias() {
         List<VehiculoCategoriaDTO> categorias = vehiculoCategoriaService.findAll();

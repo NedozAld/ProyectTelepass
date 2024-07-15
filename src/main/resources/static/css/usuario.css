@@ -1,0 +1,175 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../Imagenes/imagen.jpg");
+    background-size: cover;
+    background-position: center;
+    color: white;
+}
+
+header {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 0;
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    transition: background-color 0.3s, color 0.3s;
+    font-size: 14px;
+}
+
+nav ul li a:hover {
+    background-color: #4CAF50;
+    color: black;
+    border-radius: 5px;
+}
+
+main {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 60px);
+    flex-direction: column;
+}
+
+.content {
+    background: linear-gradient(135deg, #4CAF50, #2E7D32);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    display: none;
+    width: 90%;
+    max-width: 600px;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.content h2, .content h3 {
+    color: white;
+    text-align: center;
+    font-size: 18px;
+}
+
+.content form, .content table {
+    width: 100%;
+}
+
+.content label {
+    display: block;
+    margin: 8px 0 5px;
+    color: white;
+    font-size: 14px;
+}
+
+.content input, .content select, .content button {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 6px;
+    border: none;
+    border-radius: 3px;
+    font-size: 13px;
+}
+
+.content button {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.content button:hover {
+    background-color: #388E3C;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 10px;
+}
+
+table, th, td {
+    border: 1px solid white;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    color: white;
+    font-size: 14px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+    .content {
+        width: 100%;
+        max-width: none;
+        margin: 0 10px;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    nav ul li {
+        display: block;
+    }
+
+    nav ul li a {
+        padding: 10px;
+        text-align: center;
+        font-size: 16px;
+    }
+}
+/* Estilos existentes... */
+
+#telepass, #servicios {
+    display: none; /* Ocultas por defecto */
+}
+
+#telepass p, #telepass button, #servicios ul {
+    color: white;
+    font-size: 14px;
+}
+
+#telepass button, #servicios li {
+    margin-top: 10px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+#telepass button:hover, #servicios li:hover {
+    background-color: #388E3C;
+}

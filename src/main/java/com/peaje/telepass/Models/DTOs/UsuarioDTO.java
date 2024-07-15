@@ -2,6 +2,7 @@ package com.peaje.telepass.Models.DTOs;
 
 
 import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,4 +21,5 @@ public class UsuarioDTO {
   private String contrasena;
   private LocalDate fechaNacimiento;
   private String genero;
+  private String role;
 }

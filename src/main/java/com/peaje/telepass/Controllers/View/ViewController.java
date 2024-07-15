@@ -30,4 +30,9 @@ public class ViewController {
         return "GestionUsuario";
     }
 
+    @GetMapping("/usuario")
+    public String usuario() {
+        return "usuario";
+    }
+
 }

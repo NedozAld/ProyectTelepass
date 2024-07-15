@@ -43,25 +43,29 @@
     });
 
     async function authenticateUser() {
-    const correo = document.getElementById('login-username').value;
-    const contrasena = document.getElementById('login-password').value;
+        const correo = document.getElementById('login-username').value;
+        const contrasena = document.getElementById('login-password').value;
 
-    const response = await fetch('/api/auth/authenticate', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ correo, contrasena })
-    });
-
-    if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem('token', data.token); // Guardar el token en localStorage
-        alert('Authentication successful!');
-        window.location.href = '/dashboard';
-    } else {
-        alert('Failed to authenticate user');
-    }
+        const response = await fetch('/api/auth/authenticate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ correo, contrasena })
+        });
+    
+        if (response.ok) {
+            const data = await response.json();
+            const token = data.token;
+            const usuarioId = data.id;
+            console.log(usuarioId)
+            localStorage.setItem('token', token);// Guardar el token en localStorage
+            localStorage.setItem("usuarioId", usuarioId)
+            alert('Authentication successful!');
+            window.location.href = '/dashboard';
+        } else {
+            alert('Failed to authenticate user');
+        }
 }
 
 </script>

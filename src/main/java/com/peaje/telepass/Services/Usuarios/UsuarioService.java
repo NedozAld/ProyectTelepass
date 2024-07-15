@@ -1,15 +1,13 @@
 package com.peaje.telepass.Services.Usuarios;
 
 import com.peaje.telepass.Models.Entity.Role;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.peaje.telepass.Models.DTOs.UsuarioDTO;
 import com.peaje.telepass.Models.Entity.Usuario;
 import com.peaje.telepass.Models.Repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -85,6 +83,7 @@ public class UsuarioService {
             .contrasena(usuario.getContrasena())
             .fechaNacimiento(usuario.getFechaNacimiento())
             .genero(usuario.getGenero())
+            .role(usuario.getRole().name())
             .build();
   }
 

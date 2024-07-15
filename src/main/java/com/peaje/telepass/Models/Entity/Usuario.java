@@ -2,7 +2,7 @@ package com.peaje.telepass.Models.Entity;
 
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,6 +11,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -27,12 +29,12 @@ public class Usuario implements UserDetails {
   private LocalDate fechaNacimiento;
   private String genero;
 
-  @Enumerated(EnumType.ORDINAL)
+  @Enumerated(EnumType.STRING)
   private Role role;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of(new SimpleGrantedAuthority(role.name()));
+    return Collections.singleton(new SimpleGrantedAuthority(role.name()));
   }
 
   @Override
@@ -64,4 +66,6 @@ public class Usuario implements UserDetails {
   public boolean isEnabled() {
     return true;
   }
+
+
 }

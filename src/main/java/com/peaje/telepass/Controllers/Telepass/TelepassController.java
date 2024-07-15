@@ -1,9 +1,8 @@
 package com.peaje.telepass.Controllers.Telepass;
 
 import com.peaje.telepass.Models.DTOs.TelepassDTO;
-import com.peaje.telepass.Models.DTOs.TipoPagoDTO;
 import com.peaje.telepass.Services.Telepass.TelepassService;
-import com.peaje.telepass.Services.Telepass.TipoPagoService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

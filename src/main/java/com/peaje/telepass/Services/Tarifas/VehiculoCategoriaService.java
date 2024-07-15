@@ -38,7 +38,6 @@ public class VehiculoCategoriaService {
             return null;
         }
 
-
     }
 
     public List<VehiculoCategoriaDTO> findAll(){

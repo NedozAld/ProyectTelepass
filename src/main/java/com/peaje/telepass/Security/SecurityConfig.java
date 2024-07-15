@@ -20,20 +20,25 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
     private final JwtFilter jwtFilter;
 
+    @SuppressWarnings("deprecation")
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**","/auth","/dashboard","/login","/registro", "/css/**", "/Imagenes/**","/admin/**","/GestionUsuario").permitAll()
+        http.csrf(csrf -> csrf.disable())
+                .authorizeRequests(auth -> auth
+                        // Permitir acceso público a estas rutas
+                        .requestMatchers("/api/auth/**", "/auth", "/dashboard", "/api/**", "/api/vehiculo-categorias/**", "/login", "/registro",
+                                "/css/**", "/Imagenes/**", "/admin/**","/usuarios", "/usuario/**").permitAll()
+                        // Requiere rol USER para estas rutas
+                        .requestMatchers("/usuario/**").hasRole("USER")
+                        // Requiere rol ADMIN para estas rutas
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated())
+                        // Todas las demás rutas requieren autenticación
+                        .anyRequest().authenticated()
+                )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                //.httpBasic(Customizer.withDefaults());
-                .authenticationProvider(this.authenticationProvider)
+                .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
-
     }
 
     /*
