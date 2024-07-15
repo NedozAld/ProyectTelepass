@@ -1,6 +1,7 @@
 package com.peaje.telepass.Services.Tarifas;
 
 import com.peaje.telepass.Models.DTOs.TarifaDTO;
+import com.peaje.telepass.Models.DTOs.TarifaListDTO;
 import com.peaje.telepass.Models.Entity.Tarifa;
 import com.peaje.telepass.Models.Entity.VehiculoCategoria;
 import com.peaje.telepass.Models.Entity.Zona;
@@ -11,6 +12,7 @@ import com.peaje.telepass.Models.Repository.ZonaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -64,9 +66,10 @@ public class TarifaService {
         tarifaRepository.deleteById(id);
     }
 
-    public List<TarifaDTO> findAll(){
+    public List<TarifaListDTO> findAll(){
         return StreamSupport.stream(tarifaRepository.findAll().spliterator(), false)
-                .map(this::convertToDto)
+                .map(this::convertToDtoList)
+                .sorted(Comparator.comparing(TarifaListDTO::getId).reversed())
                 .collect(Collectors.toList());
     }
 
@@ -79,6 +82,15 @@ public class TarifaService {
                 .monto(tarifa.getMonto())
                 .vehiculoId(tarifa.getVehiculo().getId())
                 .zonaId(tarifa.getZona().getId())
+                .build();
+    }
+
+    public TarifaListDTO convertToDtoList(Tarifa tarifa) {
+        return TarifaListDTO.builder()
+                .id(tarifa.getId())
+                .monto(tarifa.getMonto())
+                .vehiculo(tarifa.getVehiculo().getTipo())
+                .zona(tarifa.getZona().getNombre())
                 .build();
     }
 }

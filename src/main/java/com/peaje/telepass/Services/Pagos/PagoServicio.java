@@ -2,6 +2,7 @@ package com.peaje.telepass.Services.Pagos;
 
 
 import com.peaje.telepass.Models.DTOs.PagoDTO;
+import com.peaje.telepass.Models.DTOs.PagoLisDTO;
 import com.peaje.telepass.Models.DTOs.TelepassDTO;
 import com.peaje.telepass.Models.Entity.*;
 import com.peaje.telepass.Models.Repository.*;
@@ -10,7 +11,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
@@ -99,6 +105,80 @@ public class PagoServicio {
         emailService.sendEmail(emailUsuario, subject, body);
     }
 
+    public PagoDTO realizarPagoEfectivo(String placa, Long zonaId) {
+        // Buscar vehículo por placa
+        Vehiculo vehiculo = vehiculoRepository.findByPlaca(placa)
+                .orElseThrow(() -> new RuntimeException("Vehículo no encontrado con la placa: " + placa));
+
+        // Buscar zona por ID
+        Zona zona = zonaRepository.findById(zonaId)
+                .orElseThrow(() -> new RuntimeException("Zona no encontrada con ID: " + zonaId));
+
+        // Obtener la categoría del vehículo
+        VehiculoCategoria categoria = vehiculo.getCategoria();
+
+        // Buscar tarifa por categoría de vehículo y zona
+        Tarifa tarifa = tarifaRepository.findByVehiculoAndZona(categoria, zona)
+                .orElseThrow(() -> new RuntimeException("Tarifa no encontrada para la categoría de vehículo y zona"));
+
+        Double monto = tarifa.getMonto();
+
+
+
+
+        // Registrar el pago
+        Pago pago = Pago.builder()
+                .zona(zona)
+                .vehiculo(vehiculo)
+                .usuario(vehiculo.getUsuario())
+                .monto(monto)
+                .fechaPago(LocalDate.now())
+                .build();
+        pagoRepository.save(pago);
+
+        // Generar factura
+        Factura factura = Factura.builder()
+                .pago(pago)
+                .detalle("Pago de peaje de " + monto + " en la zona " + zona.getNombre())
+                .usuario(vehiculo.getUsuario())
+                .fechaFactura(LocalDate.now())
+                .build();
+        facturaRepository.save(factura);
+
+        System.out.println(vehiculo.getUsuario().getCorreo());
+
+        // Envía la factura por correo electrónico
+        enviarFacturaPorCorreo(factura, vehiculo.getUsuario().getCorreo());
+
+        return convertToDto(pago);
+    }
+
+
+    public List<PagoLisDTO> findAll(){
+        return StreamSupport.stream(pagoRepository.findAll().spliterator(), false)
+                .map(this::convertToDtoList)
+                .sorted(Comparator.comparing(PagoLisDTO::getId).reversed())
+                .collect(Collectors.toList());
+    }
+
+    public Double ObtenerTarifa(String placa, Long zonaId){
+        // Buscar vehículo por placa
+        Vehiculo vehiculo = vehiculoRepository.findByPlaca(placa)
+                .orElseThrow(() -> new RuntimeException("Vehículo no encontrado con la placa: " + placa));
+
+        // Buscar zona por ID
+        Zona zona = zonaRepository.findById(zonaId)
+                .orElseThrow(() -> new RuntimeException("Zona no encontrada con ID: " + zonaId));
+
+        // Obtener la categoría del vehículo
+        VehiculoCategoria categoria = vehiculo.getCategoria();
+
+        // Buscar tarifa por categoría de vehículo y zona
+        Tarifa tarifa = tarifaRepository.findByVehiculoAndZona(categoria, zona)
+                .orElseThrow(() -> new RuntimeException("Tarifa no encontrada para la categoría de vehículo y zona"));
+
+        return tarifa.getMonto();
+    }
 
 
 
@@ -110,6 +190,17 @@ public class PagoServicio {
                 .vehiculoId(pago.getVehiculo().getId())
                 .usuarioId(pago.getUsuario().getId())
                 .monto(pago.getMonto())
+                .fechaPago(pago.getFechaPago())
+                .build();
+    }
+
+    public PagoLisDTO convertToDtoList(Pago pago){
+        return PagoLisDTO.builder()
+                .id(pago.getId())
+                .monto(pago.getMonto())
+                .zona(pago.getZona().getNombre())
+                .vehiculo(pago.getVehiculo().getMarca()+" "+pago.getVehiculo().getModelo())
+                .usuario(pago.getUsuario().getNombre()+" "+pago.getUsuario().getApellido())
                 .fechaPago(pago.getFechaPago())
                 .build();
     }

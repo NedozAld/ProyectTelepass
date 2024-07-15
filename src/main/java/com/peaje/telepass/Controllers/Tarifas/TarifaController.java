@@ -2,6 +2,7 @@ package com.peaje.telepass.Controllers.Tarifas;
 
 
 import com.peaje.telepass.Models.DTOs.TarifaDTO;
+import com.peaje.telepass.Models.DTOs.TarifaListDTO;
 import com.peaje.telepass.Services.Tarifas.TarifaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -34,8 +35,8 @@ public class TarifaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TarifaDTO>> obtenerTarifas() {
-        List<TarifaDTO> tarifas = tarifaService.findAll();
+    public ResponseEntity<List<TarifaListDTO>> obtenerTarifas() {
+        List<TarifaListDTO> tarifas = tarifaService.findAll();
         return ResponseEntity.ok(tarifas);
     }
 
