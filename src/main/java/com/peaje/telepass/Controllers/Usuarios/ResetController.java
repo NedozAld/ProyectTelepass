@@ -1,5 +1,5 @@
 package com.peaje.telepass.Controllers.Usuarios;
-
+// controlador Recuperar contraseña
 import java.util.Optional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
