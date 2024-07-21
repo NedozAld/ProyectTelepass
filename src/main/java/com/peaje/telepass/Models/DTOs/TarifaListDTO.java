@@ -1,5 +1,6 @@
 package com.peaje.telepass.Models.DTOs;
 
+// clases dto
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
