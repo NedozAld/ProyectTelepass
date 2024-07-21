@@ -1,6 +1,6 @@
 package com.peaje.telepass.Models.Entity;
 
-
+//Hello
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
