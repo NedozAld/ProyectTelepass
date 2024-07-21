@@ -1,5 +1,5 @@
 package com.peaje.telepass.Models.Entity;
-
+// clases
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
