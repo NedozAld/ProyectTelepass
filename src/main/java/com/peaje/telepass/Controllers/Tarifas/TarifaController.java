@@ -1,6 +1,6 @@
 package com.peaje.telepass.Controllers.Tarifas;
 
-
+// Controlador de tarifa
 import com.peaje.telepass.Models.DTOs.TarifaDTO;
 import com.peaje.telepass.Models.DTOs.TarifaListDTO;
 import com.peaje.telepass.Services.Tarifas.TarifaService;
