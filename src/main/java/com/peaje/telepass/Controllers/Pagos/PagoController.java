@@ -1,5 +1,5 @@
 package com.peaje.telepass.Controllers.Pagos;
-
+// controlador de Pago
 import com.peaje.telepass.Models.DTOs.PagoDTO;
 import com.peaje.telepass.Models.DTOs.PagoLisDTO;
 import com.peaje.telepass.Models.DTOs.VehiculoCategoriaDTO;
