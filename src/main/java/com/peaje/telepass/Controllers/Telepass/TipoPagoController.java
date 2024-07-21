@@ -1,5 +1,5 @@
 package com.peaje.telepass.Controllers.Telepass;
-
+// Controlador de tipo de Pago
 import com.peaje.telepass.Models.DTOs.TipoPagoDTO;
 import com.peaje.telepass.Services.Telepass.TipoPagoService;
 import lombok.RequiredArgsConstructor;
