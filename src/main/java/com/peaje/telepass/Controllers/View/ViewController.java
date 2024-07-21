@@ -1,5 +1,5 @@
 package com.peaje.telepass.Controllers.View;
-
+//Controlador de las Paginas vista
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
