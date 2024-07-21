@@ -1,5 +1,5 @@
 package com.peaje.telepass.Controllers.RecuperarEmail;
-
+// controlador para cambiar contraseña
 import com.peaje.telepass.Services.Email.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
