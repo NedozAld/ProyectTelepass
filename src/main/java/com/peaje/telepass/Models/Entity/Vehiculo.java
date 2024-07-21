@@ -1,5 +1,5 @@
 package com.peaje.telepass.Models.Entity;
-
+// clases
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
