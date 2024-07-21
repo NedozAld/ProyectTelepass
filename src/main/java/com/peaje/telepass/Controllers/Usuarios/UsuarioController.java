@@ -1,5 +1,5 @@
 package com.peaje.telepass.Controllers.Usuarios;
-
+// controlador del Usuario
 import com.peaje.telepass.Models.Entity.Usuario;
 import org.springframework.web.bind.annotation.*;
 
