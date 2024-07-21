@@ -1,5 +1,5 @@
 package com.peaje.telepass.Controllers.Tarifas;
-
+// Controlador de Categoria de Vehiculo
 import com.peaje.telepass.Models.DTOs.VehiculoCategoriaDTO;
 import com.peaje.telepass.Services.Tarifas.VehiculoCategoriaService;
 import lombok.RequiredArgsConstructor;
