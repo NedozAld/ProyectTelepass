@@ -1,5 +1,5 @@
 package com.peaje.telepass.Controllers.Tarifas;
-
+// Controlador de Zona O Peaje
 import com.peaje.telepass.Models.DTOs.ZonaDTO;
 import com.peaje.telepass.Services.Tarifas.ZonaService;
 import lombok.RequiredArgsConstructor;
