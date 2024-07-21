@@ -1,5 +1,5 @@
 package com.peaje.telepass.Models.Entity;
-
+// clases
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
