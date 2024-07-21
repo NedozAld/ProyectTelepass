@@ -1,5 +1,5 @@
 package com.peaje.telepass.Controllers.Telepass;
-
+// Controlador de Telepass
 import com.peaje.telepass.Models.DTOs.TelepassDTO;
 import com.peaje.telepass.Models.DTOs.TelepassLisDTO;
 import com.peaje.telepass.Services.Telepass.TelepassService;
