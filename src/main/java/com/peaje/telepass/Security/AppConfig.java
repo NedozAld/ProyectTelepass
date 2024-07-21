@@ -1,5 +1,5 @@
 package com.peaje.telepass.Security;
-
+//AppConfig 
 import com.peaje.telepass.Models.Entity.Usuario;
 import com.peaje.telepass.Models.Repository.UsuarioRepository;
 import org.springframework.context.annotation.Bean;
