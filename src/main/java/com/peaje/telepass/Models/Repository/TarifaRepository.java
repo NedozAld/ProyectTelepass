@@ -1,5 +1,5 @@
 package com.peaje.telepass.Models.Repository;
-
+// clases
 import com.peaje.telepass.Models.Entity.Tarifa;
 import com.peaje.telepass.Models.Entity.VehiculoCategoria;
 import com.peaje.telepass.Models.Entity.Zona;
