@@ -1,5 +1,5 @@
 package com.peaje.telepass.Models.Repository;
-
+// clases
 import com.peaje.telepass.Models.Entity.Factura;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
