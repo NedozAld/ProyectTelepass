@@ -1,5 +1,5 @@
 package com.peaje.telepass.Security.model;
-
+//AuthResponse
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
