@@ -1,4 +1,5 @@
 package com.peaje.telepass.Models.DTOs;
+// clases dto
 
 
 import com.peaje.telepass.Models.Entity.TipoPago;
