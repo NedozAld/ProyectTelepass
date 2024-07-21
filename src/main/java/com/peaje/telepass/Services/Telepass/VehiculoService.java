@@ -1,6 +1,7 @@
 package com.peaje.telepass.Services.Telepass;
 
 import com.peaje.telepass.Models.DTOs.VehiculoDTO;
+import com.peaje.telepass.Models.DTOs.VehiculoListDTO;
 import com.peaje.telepass.Models.Entity.Usuario;
 import com.peaje.telepass.Models.Entity.Vehiculo;
 import com.peaje.telepass.Models.Entity.VehiculoCategoria;
@@ -10,6 +11,7 @@ import com.peaje.telepass.Models.Repository.VehiculoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -63,15 +65,24 @@ public class VehiculoService {
         }
     }
 
-    public List<VehiculoDTO> findAll(){
+    public List<VehiculoListDTO> findAll(){
         return StreamSupport.stream(vehiculoRepository.findAll().spliterator(),false)
-                .map(this::convertToDTO)
+                .map(this::convertToDTOList)
+                .sorted(Comparator.comparing(VehiculoListDTO::getId).reversed())
                 .collect(Collectors.toList());
     }
 
 
     public void delete(Long id){
         vehiculoRepository.deleteById(id);
+    }
+
+    public List<VehiculoListDTO> findByUsuarioId(Long usuarioId) {
+        List<Vehiculo> vehiculos = vehiculoRepository.findByUsuarioId(usuarioId);
+        return vehiculos.stream()
+                .map(this::convertToDTOList)
+                .sorted(Comparator.comparing(VehiculoListDTO::getId).reversed())
+                .collect(Collectors.toList());
     }
 
 
@@ -83,6 +94,18 @@ public class VehiculoService {
                 .placa(vehiculo.getPlaca())
                 .color(vehiculo.getColor())
                 .categoriaId(vehiculo.getCategoria().getId())
+                .usuarioId(vehiculo.getUsuario().getId())
+                .build();
+    }
+
+    public VehiculoListDTO convertToDTOList(Vehiculo vehiculo){
+        return VehiculoListDTO.builder()
+                .id(vehiculo.getId())
+                .modelo(vehiculo.getModelo())
+                .marca(vehiculo.getMarca())
+                .placa(vehiculo.getPlaca())
+                .color(vehiculo.getColor())
+                .categoriaId(vehiculo.getCategoria().getTipo())
                 .usuarioId(vehiculo.getUsuario().getId())
                 .build();
     }

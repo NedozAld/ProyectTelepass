@@ -4,42 +4,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/index.css"
+    <link rel="stylesheet" href="../css/index.css">
     <script src="https://kit.fontawesome.com/711a7ccf81.js" crossorigin="anonymous"></script>
     <title>Pagina</title>
 </head>
 
 <body>
-<header>
-    <div class="logo">SistemaPeaje!</div>
-    <input type="checkbox" id="menu-toggle" class="menu-toggle">
-    <label for="menu-toggle" class="menu-icon">
-        <i class="fas fa-bars"></i>
-    </label>
-    <nav class="navegacion">
-        <a href="#">INICIO</a>
-        <a href="#">SERVICIOS</a>
-        <a href="#">CONTACTOS</a>
-        <a href="#">CONTACTOS</a>
-        <button class="btn" id="login-btn">Iniciar Sesión</button>
-        <button class="btn1" id="register-btn">Registro</button>
-    </nav>
-</header>
-<main>
-    <div class="hero">
-        <h1>Bienvenido al sistema de peaje</h1>
-        <button onclick="window.location.href='#'">Explorar</button>
-    </div>
-</main>
-<script>
-        document.getElementById('login-btn').addEventListener('click', function() {
-        window.location.href = '/login'; // Cambia '/login.html' por la URL correcta de tu página de login
-        });
-
-        document.getElementById('register-btn').addEventListener('click', function() {
-        window.location.href = '/registro'; // Cambia '/registro.html' por la URL correcta de tu página de registro
-        });
-</script>
+    <header>
+        <div class="logo">SistemaPeaje!</div>
+        <input type="checkbox" id="menu-toggle" class="menu-toggle">
+        <label for="menu-toggle" class="menu-icon">
+            <i class="fas fa-bars"></i>
+        </label>
+        <nav class="navegacion">
+            <a href="#">INICIO</a>
+            <a href="#">SERVICIOS</a>
+            <a href="#" id="contact-link">CONTACTOS</a>
+            <button class="btn" id="login-btn">Iniciar Sesión</button>
+            <button class="btn1" id="register-btn">Registro</button>
+        </nav>
+    </header>
+    <main>
+        <div class="hero">
+            <h1>Bienvenido al sistema de peaje</h1>
+            <button onclick="window.location.href='#'">Explorar</button>
+        </div>
+    </main>
+    <script src="../js/index.js"></script>
 </body>
 
 </html>

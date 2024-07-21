@@ -41,4 +41,16 @@ public class PagoController {
         Double tarifa = pagoService.ObtenerTarifa(placa,zonaId);
         return ResponseEntity.ok(tarifa);
     }
+
+    @GetMapping("/tarifaEfectivoPago")
+    public ResponseEntity<Double> ObtenerTarifaPago(@RequestParam Long vehiculoId, @RequestParam Long zonaId){
+        Double tarifa = pagoService.ObtenerTarifaPago(vehiculoId, zonaId);
+        return ResponseEntity.ok(tarifa);
+    }
+
+    @GetMapping("/usuario/{usuarioId}")
+    public ResponseEntity<List<PagoLisDTO>> getPagosByUsuarioId(@PathVariable Long usuarioId) {
+        List<PagoLisDTO> pagos = pagoService.findByUsuarioId(usuarioId);
+        return ResponseEntity.ok(pagos);
+    }
 }

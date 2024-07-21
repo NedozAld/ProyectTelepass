@@ -10,12 +10,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TelepassDTO {
+public class VehiculoListDTO {
+
     private Long id;
+    private String modelo;
+    private String marca;
+    private String placa;
+    private String color;
+    private String categoriaId;
     private Long usuarioId;
-    private Double saldo;
-    private Boolean activo;
-    private String nombre;
-    private Long tipoPagoId;
-    private Long vehiculoId;
 }

@@ -35,4 +35,12 @@ public class ViewController {
         return "usuario";
     }
 
+    @GetMapping("/recuperarEmail")
+    public String recuperarEmail() {
+        return "recuperarEmail";
+    }
+    @GetMapping("/reset-password/cambiar-contrasena")
+    public String cambiarContrasena() {
+        return "cContrasena"; // asegúrate de que el nombre de la vista coincida con el archivo HTML
+    }
 }

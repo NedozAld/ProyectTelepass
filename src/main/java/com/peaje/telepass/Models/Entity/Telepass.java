@@ -20,7 +20,9 @@ public class Telepass {
     private Usuario usuario;
     private Double saldo;
     private Boolean activo;
-    @ManyToOne
+    private String nombre;
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "tipo_pago_id")
     private TipoPago tipoPago;
     @ManyToOne
     private  Vehiculo vehiculo;

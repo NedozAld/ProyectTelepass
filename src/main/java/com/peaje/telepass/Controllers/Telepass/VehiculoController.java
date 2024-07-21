@@ -2,6 +2,7 @@ package com.peaje.telepass.Controllers.Telepass;
 
 
 import com.peaje.telepass.Models.DTOs.VehiculoDTO;
+import com.peaje.telepass.Models.DTOs.VehiculoListDTO;
 import com.peaje.telepass.Models.Entity.Vehiculo;
 import com.peaje.telepass.Models.Repository.VehiculoRepository;
 import com.peaje.telepass.Services.Telepass.VehiculoService;
@@ -33,8 +34,8 @@ public class VehiculoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<VehiculoDTO>> findAll() {
-        List<VehiculoDTO> vehiculos = vehiculoService.findAll();
+    public ResponseEntity<List<VehiculoListDTO>> findAll() {
+        List<VehiculoListDTO> vehiculos = vehiculoService.findAll();
         return ResponseEntity.ok(vehiculos);
     }
 
@@ -45,12 +46,9 @@ public class VehiculoController {
     }
 
     @GetMapping("/{usuarioId}")
-    public ResponseEntity<List<VehiculoDTO>> getVehiculosByUsuarioId(@PathVariable Long usuarioId) {
-        List<Vehiculo> vehiculos = vehiculoRepository.findByUsuarioId(usuarioId);
-        List<VehiculoDTO> vehiculoDTOs = vehiculos.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(vehiculoDTOs);
+    public ResponseEntity<List<VehiculoListDTO>> getVehiculosByUsuarioId(@PathVariable Long usuarioId) {
+        List<VehiculoListDTO> vehiculos = vehiculoService.findByUsuarioId(usuarioId);
+        return ResponseEntity.ok(vehiculos);
     }
 
     @DeleteMapping("/eliminar/{id}")

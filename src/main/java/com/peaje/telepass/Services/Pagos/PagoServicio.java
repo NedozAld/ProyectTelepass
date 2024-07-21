@@ -161,6 +161,14 @@ public class PagoServicio {
                 .collect(Collectors.toList());
     }
 
+    public List<PagoLisDTO> findByUsuarioId(Long usuarioId) {
+        List<Pago> pagos = pagoRepository.findByUsuarioId(usuarioId);
+        return pagos.stream()
+                .map(this::convertToDtoList)
+                .sorted(Comparator.comparing(PagoLisDTO::getId).reversed())
+                .collect(Collectors.toList());
+    }
+
     public Double ObtenerTarifa(String placa, Long zonaId){
         // Buscar vehículo por placa
         Vehiculo vehiculo = vehiculoRepository.findByPlaca(placa)
@@ -170,6 +178,26 @@ public class PagoServicio {
         Zona zona = zonaRepository.findById(zonaId)
                 .orElseThrow(() -> new RuntimeException("Zona no encontrada con ID: " + zonaId));
 
+        // Obtener la categoría del vehículo
+        VehiculoCategoria categoria = vehiculo.getCategoria();
+
+        // Buscar tarifa por categoría de vehículo y zona
+        Tarifa tarifa = tarifaRepository.findByVehiculoAndZona(categoria, zona)
+                .orElseThrow(() -> new RuntimeException("Tarifa no encontrada para la categoría de vehículo y zona"));
+
+        return tarifa.getMonto();
+    }
+
+    public Double ObtenerTarifaPago(Long vehiculoId, Long zonaId){
+
+        Vehiculo vehiculo = vehiculoRepository.findById(vehiculoId)
+                .orElseThrow(() -> new RuntimeException("Vehiculo no encontrado"));
+
+        Telepass telepass = telepassRepository.findByVehiculoId(vehiculoId)
+                .orElseThrow(() -> new RuntimeException("Telepass no encontrado para el vehículo"));
+
+        Zona zona = zonaRepository.findById(zonaId)
+                .orElseThrow(() -> new RuntimeException("Zona no encontrada"));
         // Obtener la categoría del vehículo
         VehiculoCategoria categoria = vehiculo.getCategoria();
 
